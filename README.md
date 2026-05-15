@@ -34,21 +34,21 @@
     * [x] Install Docker and Docker Compose (if not already installed).
     * [x] Spin up a PostgreSQL container via the terminal.
     * [x] Spin up a pgAdmin container for a visual GUI management tool.
-    * [ ] Create a new database named `shop`.
-    * [ ] Create a `users` table (fields: id, name, email).
-    * [ ] Create a `products` table (fields: id, title, price).
-    * [ ] Create an `orders` table (fields: id, user_id, created_at) and link it to the `users` table.
+    * [x] Create a new database named `shop`.
+    * [x] Create a `users` table (fields: id, name, email).
+    * [x] Create a `products` table (fields: id, title, price).
+    * [x] Create an `orders` table (fields: id, user_id, created_at) and link it to the `users` table.
 
 ### Day 2 — CRUD Operations
 * **Theory:** `SELECT`, `INSERT`, `UPDATE`, `DELETE` statements, filtering with `WHERE`, sorting, and limits.
 * **Practice:**
-    * [ ] Insert 5 test users into the `users` table using `INSERT`.
-    * [ ] Insert 5 items into the `products` table with different prices.
-    * [ ] Write a `SELECT` query to fetch absolutely all users.
-    * [ ] Write a query to select products that cost strictly more than 100.
-    * [ ] Fetch the last 5 orders from the `orders` table, sorted by date.
-    * [ ] Update the price of a specific product by its `id` using `UPDATE`.
-    * [ ] Delete one test user by their `id` using `DELETE`.
+    * [x] Insert 5 test users into the `users` table using `INSERT`.
+    * [x] Insert 5 items into the `products` table with different prices.
+    * [x] Write a `SELECT` query to fetch absolutely all users.
+    * [x] Write a query to select products that cost strictly more than 100.
+    * [x] Fetch the last 5 orders from the `orders` table, sorted by date.
+    * [x] Update the price of a specific product by its `id` using `UPDATE`.
+    * [x] Delete one test user by their `id` using `DELETE`.
 
 ### Day 3 — JOINs and Relations
 * **Theory:** Relationship types (1:N), `INNER JOIN` vs. `LEFT JOIN`.
