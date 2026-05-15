@@ -31,9 +31,9 @@
 ### Day 1 — Setting Up PostgreSQL
 * **Theory:** What is a database, table, row, and column? Primary Key (PK) and Foreign Key (FK).
 * **Practice:**
-    * [ ] Install Docker and Docker Compose (if not already installed).
-    * [ ] Spin up a PostgreSQL container via the terminal.
-    * [ ] Spin up a pgAdmin container for a visual GUI management tool.
+    * [x] Install Docker and Docker Compose (if not already installed).
+    * [x] Spin up a PostgreSQL container via the terminal.
+    * [x] Spin up a pgAdmin container for a visual GUI management tool.
     * [ ] Create a new database named `shop`.
     * [ ] Create a `users` table (fields: id, name, email).
     * [ ] Create a `products` table (fields: id, title, price).
