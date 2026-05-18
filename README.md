@@ -53,11 +53,11 @@
 ### Day 3 — JOINs and Relations
 * **Theory:** Relationship types (1:N), `INNER JOIN` vs. `LEFT JOIN`.
 * **Practice:**
-    * [ ] Create several test orders in the `orders` table, binding them to existing `user_id`s.
-    * [ ] Write an `INNER JOIN` query to get a list of user names alongside their order IDs.
-    * [ ] Write a `LEFT JOIN` query to display all users (even those without any orders).
-    * [ ] Formulate a query to find only the users who have never placed an order.
-    * [ ] Count how many orders each individual user has made.
+    * [x] Create several test orders in the `orders` table, binding them to existing `user_id`s.
+    * [x] Write an `INNER JOIN` query to get a list of user names alongside their order IDs.
+    * [x] Write a `LEFT JOIN` query to display all users (even those without any orders).
+    * [x] Formulate a query to find only the users who have never placed an order.
+    * [x] Count how many orders each individual user has made.
 
 ---
 
