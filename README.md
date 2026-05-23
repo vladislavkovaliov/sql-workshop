@@ -67,11 +67,11 @@
 ### Day 1 — Normalization and M:N
 * **Theory:** Normal forms, many-to-many relationships, Pivot tables (junction tables).
 * **Practice:**
-    * [ ] Create a new `categories` table (id, title) to group products.
-    * [ ] Create a pivot table `product_categories` with foreign keys pointing to products and categories.
-    * [ ] Add test categories (e.g., Electronics, Apparel, Books).
-    * [ ] Link a single product to two categories simultaneously.
-    * [ ] Write a query using two `JOIN`s to display the product title along with all its categories.
+    * [x] Create a new `categories` table (id, title) to group products.
+    * [x] Create a pivot table `product_categories` with foreign keys pointing to products and categories.
+    * [x] Add test categories (e.g., Electronics, Apparel, Books).
+    * [x] Link a single product to two categories simultaneously.
+    * [x] Write a query using two `JOIN`s to display the product title along with all its categories.
 
 ### Day 2 — Indexes
 * **Theory:** How indexes work (B-tree), why queries slow down (Full/Sequential Scan).
