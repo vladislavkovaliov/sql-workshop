@@ -106,10 +106,10 @@
 ### Day 2 — CTEs and Subqueries
 * **Theory:** Nested queries, Common Table Expressions (`WITH` syntax).
 * **Practice:**
-    * [ ] Write a subquery inside a `WHERE` clause to find users who bought the most expensive product.
-    * [ ] Rewrite that exact query using the `WITH` (CTE) syntax to compare readability.
-    * [ ] Use a CTE to fetch the single most recent order for every registered user.
-    * [ ] Write a query returning products that have never been purchased (using a `NOT IN` subquery).
+    * [x] Write a subquery inside a `WHERE` clause to find users who bought the most expensive product.
+    * [x] Rewrite that exact query using the `WITH` (CTE) syntax to compare readability.
+    * [x] Use a CTE to fetch the single most recent order for every registered user.
+    * [x] Write a query returning products that have never been purchased (using a `NOT IN` subquery).
 
 ### Day 3 — Backend API in Go
 * **Theory:** Core interaction principles: Frontend → Go API → SQL. Understanding connection pools (`sql.DB`) and row scanning (`rows.Scan`).
