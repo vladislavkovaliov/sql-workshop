@@ -76,18 +76,18 @@
 ### Day 2 — Indexes
 * **Theory:** How indexes work (B-tree), why queries slow down (Full/Sequential Scan).
 * **Practice:**
-    * [ ] Generate and insert over 10,000 mock rows into the `products` table (you can use loops or the `generate_series` function).
-    * [ ] Write a standard `SELECT` query to find a product by price and measure execution time (without an index).
-    * [ ] Create a B-tree index for the `price` column in the `products` table.
-    * [ ] Run the same search query again and record the performance difference.
+    * [x] Generate and insert over 10,000 mock rows into the `products` table (you can use loops or the `generate_series` function).
+    * [x] Write a standard `SELECT` query to find a product by price and measure execution time (without an index).
+    * [x] Create a B-tree index for the `price` column in the `products` table.
+    * [x] Run the same search query again and record the performance difference.
 
 ### Day 3 — EXPLAIN ANALYZE
 * **Theory:** Query execution plans, `Seq Scan`, `Index Scan`, and query `cost`.
 * **Practice:**
-    * [ ] Run the `EXPLAIN` command for a search query on a text field (without an index) and study the output.
-    * [ ] Run `EXPLAIN ANALYZE` for the price query (where the index exists) and find the `Index Scan` line in the logs.
-    * [ ] Identify the `cost` value and the actual execution time in milliseconds.
-    * [ ] Try writing a query that intentionally forces the database to ignore the index and trigger a `Seq Scan`.
+    * [x] Run the `EXPLAIN` command for a search query on a text field (without an index) and study the output.
+    * [x] Run `EXPLAIN ANALYZE` for the price query (where the index exists) and find the `Index Scan` line in the logs.
+    * [x] Identify the `cost` value and the actual execution time in milliseconds.
+    * [x] Try writing a query that intentionally forces the database to ignore the index and trigger a `Seq Scan`.
 
 ---
 
@@ -97,11 +97,11 @@
 ### Day 1 — GROUP BY & Aggregations
 * **Theory:** `COUNT`, `SUM`, `AVG`, `GROUP BY`, and filtering groups using `HAVING`.
 * **Practice:**
-    * [ ] Count the total number of orders in the shop using `COUNT`.
-    * [ ] Find the total revenue of all sold products using `SUM`.
-    * [ ] Calculate the average product price in a specific category using `AVG`.
-    * [ ] Group orders by day and display the number of purchases for each date.
-    * [ ] Find the top 3 buyers who have placed the most orders (use `HAVING` or `ORDER BY`).
+    * [x] Count the total number of orders in the shop using `COUNT`.
+    * [x] Find the total revenue of all sold products using `SUM`.
+    * [x] Calculate the average product price in a specific category using `AVG`.
+    * [x] Group orders by day and display the number of purchases for each date.
+    * [x] Find the top 3 buyers who have placed the most orders (use `HAVING` or `ORDER BY`).
 
 ### Day 2 — CTEs and Subqueries
 * **Theory:** Nested queries, Common Table Expressions (`WITH` syntax).

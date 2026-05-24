@@ -31,3 +31,4 @@ SELECT * FROM products WHERE price = 500;
 
 /* 5. Clean up — drop the index */
 DROP INDEX IF EXISTS idx_products_price;
+
