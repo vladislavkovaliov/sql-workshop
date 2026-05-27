@@ -114,13 +114,13 @@
 ### Day 3 — Backend API in Go
 * **Theory:** Core interaction principles: Frontend → Go API → SQL. Understanding connection pools (`sql.DB`) and row scanning (`rows.Scan`).
 * **Practice:**
-    * [ ] Initialize a new Go module in a clean directory (`go mod init shop-api`).
-    * [ ] Install the official pgx driver for PostgreSQL (`go get github.com/jackc/pgx/v5/stdlib`).
-    * [ ] Create a `Product` struct in Go that matches the fields in your database table.
-    * [ ] Set up the DB connection using `sql.Open("pgx", "postgres://postgres:postgres@localhost:5432/shop")`.
-    * [ ] Create an HTTP handler for the `/api/products` route that executes `SELECT id, title, price FROM products`.
-    * [ ] Implement a `rows.Next()` loop to parse the data and return it to the client as JSON using `json.NewEncoder`.
-    * [ ] Start the server on port `:8080` and test the endpoint using a browser or Postman.
+    * [x] Initialize a new Go module in a clean directory (`go mod init shop-api`).
+    * [x] Install the official pgx driver for PostgreSQL (`go get github.com/jackc/pgx/v5/stdlib`).
+    * [x] Create a `Product` struct in Go that matches the fields in your database table.
+    * [x] Set up the DB connection using `sql.Open("pgx", "postgres://postgres:postgres@localhost:5432/shop")`.
+    * [x] Create an HTTP handler for the `/api/products` route that executes `SELECT id, title, price FROM products`.
+    * [x] Implement a `rows.Next()` loop to parse the data and return it to the client as JSON using `json.NewEncoder`.
+    * [x] Start the server on port `:8080` and test the endpoint using a browser or Postman.
 
 ---
 
@@ -130,11 +130,11 @@
 ### Day 1 — Real-World Performance
 * **Theory:** The N+1 query problem, pagination strategies (Offset vs. Cursor), heavy JOINs.
 * **Practice:**
-    * [ ] Modify your Go HTTP handler for `/api/products` to accept `limit` and `offset` URL parameters.
-    * [ ] Add input validation (handling default values if parameters are missing).
-    * [ ] Integrate `LIMIT` and `OFFSET` into the SQL query inside your Go code using placehoders (`$1`, `$2`) to prevent SQL injections.
-    * [ ] Write a mock query for Cursor-based pagination based on an element ID in Go.
-    * [ ] Run `EXPLAIN` on a query with a massive offset (`OFFSET 5000`) to visualize why it degrades performance.
+    * [x] Modify your Go HTTP handler for `/api/products` to accept `limit` and `offset` URL parameters.
+    * [x] Add input validation (handling default values if parameters are missing).
+    * [x] Integrate `LIMIT` and `OFFSET` into the SQL query inside your Go code using placehoders (`$1`, `$2`) to prevent SQL injections.
+    * [x] Write a mock query for Cursor-based pagination based on an element ID in Go.
+    * [x] Run `EXPLAIN` on a query with a massive offset (`OFFSET 5000`) to visualize why it degrades performance.
 
 ### Day 2 — Database Design Challenge
 * **Practice:**

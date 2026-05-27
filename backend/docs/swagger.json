@@ -1,0 +1,117 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Educational SQL workshop backend API",
+        "title": "Shop API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/api",
+    "paths": {
+        "/products": {
+            "get": {
+                "description": "Returns all products from the database",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "products"
+                ],
+                "summary": "List all products",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Number of products to return (default 10)",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Number of products to skip (default 0)",
+                        "name": "offset",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.ProductResponse"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/products/cursor": {
+            "get": {
+                "description": "Returns products with cursor-based pagination. Pass the last product ID from the previous response as cursor.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "products"
+                ],
+                "summary": "List products (cursor-based)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Number of products to return (default 10)",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Last product ID from previous page",
+                        "name": "cursor",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.CursorProductsResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "dto.CursorProductsResponse": {
+            "type": "object",
+            "properties": {
+                "next_cursor": {
+                    "type": "integer"
+                },
+                "products": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.ProductResponse"
+                    }
+                }
+            }
+        },
+        "dto.ProductResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "price": {
+                    "type": "number",
+                    "example": 150
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Keyboard"
+                }
+            }
+        }
+    }
+}
