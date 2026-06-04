@@ -96,3 +96,34 @@ func (r *PgxRepository) List(ctx context.Context, limit int, offset int) ([]*pro
 
 	return products, rows.Err()
 }
+
+func (r *PgxRepository) TotalRevenue(ctx context.Context) ([]*proddomain.TotalRevenue, error) {
+	rows, err := r.pool.Query(ctx, `
+		SELECT p.title, SUM(p.price * oi.quantity) AS revenue
+		FROM order_items oi
+		JOIN products p ON p.id = oi.product_id
+		GROUP BY p.id, p.title
+		ORDER BY revenue DESC;
+	`)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	var totalRevenues []*proddomain.TotalRevenue
+
+	for rows.Next() {
+		var title string
+		var revenue float64
+
+		if err := rows.Scan(&title, &revenue); err != nil {
+			return nil, err
+		}
+
+		totalRevenues = append(totalRevenues, proddomain.NewTotalRevenue(title, revenue))
+	}
+
+	return totalRevenues, rows.Err()
+}

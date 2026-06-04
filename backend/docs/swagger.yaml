@@ -63,6 +63,15 @@ definitions:
       total:
         type: integer
     type: object
+  dto.ListTotalRevenueResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/dto.TotalRevenueResponse'
+        type: array
+      total:
+        type: integer
+    type: object
   dto.ListUserResponse:
     properties:
       data:
@@ -94,6 +103,13 @@ definitions:
         type: number
       title:
         example: Keyboard
+        type: string
+    type: object
+  dto.TotalRevenueResponse:
+    properties:
+      revenue:
+        type: number
+      title:
         type: string
     type: object
   dto.UserResponse:
@@ -229,6 +245,20 @@ paths:
           schema:
             $ref: '#/definitions/dto.CursorProductsResponse'
       summary: List products (cursor-based)
+      tags:
+      - products
+  /products/revenue:
+    get:
+      description: Returns products sorted by total revenue (SUM of price * quantity
+        per product)
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ListTotalRevenueResponse'
+      summary: Get total revenue per product
       tags:
       - products
   /users:

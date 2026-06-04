@@ -20,3 +20,13 @@ type CursorProductsResponse struct {
 	Products   []ProductResponse `json:"products"`
 	NextCursor int64             `json:"next_cursor"`
 }
+
+type TotalRevenueResponse struct {
+	Title   string  `json:"title"`
+	Revenue float64 `json:"revenue"`
+}
+
+type ListTotalRevenueResponse struct {
+	Data  []TotalRevenueResponse `json:"data"`
+	Total int                    `json:"total"`
+}

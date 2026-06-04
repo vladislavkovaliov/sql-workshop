@@ -192,6 +192,26 @@ const docTemplate = `{
                 }
             }
         },
+        "/products/revenue": {
+            "get": {
+                "description": "Returns products sorted by total revenue (SUM of price * quantity per product)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "products"
+                ],
+                "summary": "Get total revenue per product",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ListTotalRevenueResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/users": {
             "get": {
                 "description": "Returns all users from the database",
@@ -387,6 +407,20 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.ListTotalRevenueResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.TotalRevenueResponse"
+                    }
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
         "dto.ListUserResponse": {
             "type": "object",
             "properties": {
@@ -432,6 +466,17 @@ const docTemplate = `{
                 "title": {
                     "type": "string",
                     "example": "Keyboard"
+                }
+            }
+        },
+        "dto.TotalRevenueResponse": {
+            "type": "object",
+            "properties": {
+                "revenue": {
+                    "type": "number"
+                },
+                "title": {
+                    "type": "string"
                 }
             }
         },

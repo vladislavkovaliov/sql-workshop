@@ -147,3 +147,34 @@ func (h *ProductHandler) CreateProduct(c *gin.Context) {
 		Price: product.Price(),
 	})
 }
+
+// TotalRevenue godoc
+//
+//	@Summary		Get total revenue per product
+//	@Description	Returns products sorted by total revenue (SUM of price * quantity per product)
+//	@Tags			products
+//	@Produce		json
+//	@Success		200	{object}	dto.ListTotalRevenueResponse
+//	@Router			/products/revenue [get]
+func (h *ProductHandler) TotalRevenue(c *gin.Context) {
+	totalRevenues, err := h.service.TotalRevenue(c.Request.Context())
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	res := make([]dto.TotalRevenueResponse, 0, len(totalRevenues))
+
+	for _, p := range totalRevenues {
+		res = append(res, dto.TotalRevenueResponse{
+			Title:   p.Title(),
+			Revenue: p.Revenue(),
+		})
+	}
+
+	c.JSON(http.StatusOK, dto.ListTotalRevenueResponse{
+		Data:  res,
+		Total: len(totalRevenues),
+	})
+}

@@ -45,3 +45,7 @@ func (s *Service) Create(ctx context.Context, title string, price float64) (*pro
 
 	return s.repo.Create(ctx, title, price)
 }
+
+func (s *Service) TotalRevenue(ctx context.Context) ([]*proddomain.TotalRevenue, error) {
+	return s.repo.TotalRevenue(ctx)
+}

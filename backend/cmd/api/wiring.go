@@ -40,6 +40,7 @@ func wireProducts(rg *gin.RouterGroup, pool *pgxpool.Pool) {
 	rg.GET("/products", h.ListProducts)
 	rg.POST("/products", h.CreateProduct)
 	rg.GET("/products/cursor", h.ListCursorProducts)
+	rg.GET("/products/revenue", h.TotalRevenue)
 }
 
 func wireOrders(rg *gin.RouterGroup, pool *pgxpool.Pool) {
