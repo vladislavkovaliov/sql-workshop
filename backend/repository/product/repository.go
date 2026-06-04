@@ -16,6 +16,12 @@ func NewPgxRepository(pool *pgxpool.Pool) *PgxRepository {
 	return &PgxRepository{pool: pool}
 }
 
+func (r *PgxRepository) Count(ctx context.Context) (int, error) {
+	var total int
+	err := r.pool.QueryRow(ctx, "SELECT COUNT(*) FROM products").Scan(&total)
+	return total, err
+}
+
 func (r *PgxRepository) ListCursor(ctx context.Context, cursor int, limit int) ([]*proddomain.Product, error) {
 	var query string
 	var args []any
@@ -51,6 +57,18 @@ func (r *PgxRepository) ListCursor(ctx context.Context, cursor int, limit int) (
 	}
 
 	return products, rows.Err()
+}
+
+func (r *PgxRepository) Create(ctx context.Context, title string, price float64) (*proddomain.Product, error) {
+	var id int64
+
+	err := r.pool.QueryRow(ctx, "INSERT INTO products (title, price) VALUES ($1, $2) RETURNING id", title, price).Scan(&id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return proddomain.NewProduct(id, title, price), nil
 }
 
 func (r *PgxRepository) List(ctx context.Context, limit int, offset int) ([]*proddomain.Product, error) {

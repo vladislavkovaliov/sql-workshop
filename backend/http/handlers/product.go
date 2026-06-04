@@ -24,7 +24,7 @@ func NewProductHandler(service *productservice.Service) *ProductHandler {
 //	@Description	Returns all products from the database
 //	@Tags			products
 //	@Produce		json
-//	@Success		200	{array}	dto.ProductResponse
+//	@Success		200	{object}	dto.ListProductResponse
 //	@Router			/products [get]
 //
 //	@Param			limit	query	int	false	"Number of products to return (default 10)"
@@ -41,7 +41,7 @@ func (h *ProductHandler) ListProducts(c *gin.Context) {
 		defaultOffset = offset
 	}
 
-	products, err := h.service.List(c.Request.Context(), defaultLimit, defaultOffset)
+	products, total, err := h.service.List(c.Request.Context(), defaultLimit, defaultOffset)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -58,7 +58,11 @@ func (h *ProductHandler) ListProducts(c *gin.Context) {
 		})
 	}
 
-	c.JSON(http.StatusOK, res)
+	c.JSON(http.StatusOK, dto.ListProductResponse{
+		Data:  res,
+		Total: total,
+	})
+
 }
 
 // ListCursorProducts godoc
@@ -109,5 +113,37 @@ func (h *ProductHandler) ListCursorProducts(c *gin.Context) {
 	c.JSON(http.StatusOK, dto.CursorProductsResponse{
 		Products:   res,
 		NextCursor: nextCursor,
+	})
+}
+
+// CreateProduct godoc
+//
+//	@Summary		Create a product
+//	@Description	Add a new product to the database
+//	@Tags			products
+//	@Accept			json
+//	@Produce		json
+//	@Param			body	body	dto.CreateProductRequest	true	"Product data"
+//	@Success		201		{object}	dto.ProductResponse
+//	@Failure		400		{object}	map[string]string
+//	@Router			/products [post]
+func (h *ProductHandler) CreateProduct(c *gin.Context) {
+	var req dto.CreateProductRequest
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	product, err := h.service.Create(c.Request.Context(), req.Title, req.Price)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusCreated, dto.ProductResponse{
+		ID:    product.ID(),
+		Title: product.Title(),
+		Price: product.Price(),
 	})
 }

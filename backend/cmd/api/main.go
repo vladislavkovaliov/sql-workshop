@@ -9,16 +9,10 @@ import (
 	"context"
 	"log"
 
-	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5/pgxpool"
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
 
 	_ "shop-api/docs"
-	"shop-api/http/handlers"
 	"shop-api/internal/config"
-	productrepo "shop-api/repository/product"
-	productservice "shop-api/service/product"
 )
 
 func main() {
@@ -32,14 +26,7 @@ func main() {
 
 	defer pool.Close()
 
-	repo := productrepo.NewPgxRepository(pool)
-	svc := productservice.New(repo)
-	handler := handlers.NewProductHandler(svc)
-
-	r := gin.Default()
-	r.GET("/api/products", handler.ListProducts)
-	r.GET("/api/products/cursor", handler.ListCursorProducts)
-	r.GET("/api/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	r := setupRouter(pool)
 
 	log.Printf("Server starting on port %s", cfg.Port)
 

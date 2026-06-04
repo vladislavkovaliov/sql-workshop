@@ -6,6 +6,16 @@ type ProductResponse struct {
 	Price float64 `json:"price" example:"150.00"`
 }
 
+type ListProductResponse struct {
+	Data  []ProductResponse `json:"data"`
+	Total int               `json:"total"`
+}
+
+type CreateProductRequest struct {
+	Title string  `json:"title" example:"Keyboard"`
+	Price float64 `json:"price" example:"150.00"`
+}
+
 type CursorProductsResponse struct {
 	Products   []ProductResponse `json:"products"`
 	NextCursor int64             `json:"next_cursor"`

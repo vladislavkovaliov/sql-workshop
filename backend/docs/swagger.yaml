@@ -1,5 +1,23 @@
 basePath: /api
 definitions:
+  dto.CategoryResponse:
+    properties:
+      id:
+        example: 1
+        type: integer
+      title:
+        example: Keyboard
+        type: string
+    type: object
+  dto.CreateProductRequest:
+    properties:
+      price:
+        example: 150
+        type: number
+      title:
+        example: Keyboard
+        type: string
+    type: object
   dto.CursorProductsResponse:
     properties:
       next_cursor:
@@ -8,6 +26,63 @@ definitions:
         items:
           $ref: '#/definitions/dto.ProductResponse'
         type: array
+    type: object
+  dto.CursorUserResponse:
+    properties:
+      next_cursor:
+        type: integer
+      users:
+        items:
+          $ref: '#/definitions/dto.UserResponse'
+        type: array
+    type: object
+  dto.ListCategoryResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/dto.CategoryResponse'
+        type: array
+      total:
+        type: integer
+    type: object
+  dto.ListOrderResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/dto.OrderResponse'
+        type: array
+      total:
+        type: integer
+    type: object
+  dto.ListProductResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/dto.ProductResponse'
+        type: array
+      total:
+        type: integer
+    type: object
+  dto.ListUserResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/dto.UserResponse'
+        type: array
+      total:
+        type: integer
+    type: object
+  dto.OrderResponse:
+    properties:
+      created_at:
+        example: "2026-05-11 01:45:24.864701"
+        type: string
+      id:
+        example: 1
+        type: integer
+      user_id:
+        example: 1
+        type: integer
     type: object
   dto.ProductResponse:
     properties:
@@ -21,6 +96,18 @@ definitions:
         example: Keyboard
         type: string
     type: object
+  dto.UserResponse:
+    properties:
+      email:
+        example: text@gmail.com
+        type: string
+      id:
+        example: 1
+        type: integer
+      name:
+        example: username
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -28,6 +115,50 @@ info:
   title: Shop API
   version: "1.0"
 paths:
+  /category:
+    get:
+      description: Returns all categories from the database
+      parameters:
+      - description: Number of categories to return (default 10)
+        in: query
+        name: limit
+        type: integer
+      - description: Number of categories to skip (default 0)
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ListCategoryResponse'
+      summary: List all categories
+      tags:
+      - category
+  /orders:
+    get:
+      description: Returns all orders from the database
+      parameters:
+      - description: Number of products to return (default 10)
+        in: query
+        name: limit
+        type: integer
+      - description: Number of products to skip (default 0)
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ListOrderResponse'
+      summary: List all orders
+      tags:
+      - orders
   /products:
     get:
       description: Returns all products from the database
@@ -46,10 +177,35 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/dto.ProductResponse'
-            type: array
+            $ref: '#/definitions/dto.ListProductResponse'
       summary: List all products
+      tags:
+      - products
+    post:
+      consumes:
+      - application/json
+      description: Add a new product to the database
+      parameters:
+      - description: Product data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateProductRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.ProductResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a product
       tags:
       - products
   /products/cursor:
@@ -75,4 +231,68 @@ paths:
       summary: List products (cursor-based)
       tags:
       - products
+  /users:
+    get:
+      description: Returns all users from the database
+      parameters:
+      - description: Number of users to return (default 10)
+        in: query
+        name: limit
+        type: integer
+      - description: Number of users to skip (default 0)
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ListUserResponse'
+      summary: List all users
+      tags:
+      - users
+  /users/cursor:
+    get:
+      description: Returns users with cursor-based pagination. Pass the last user
+        ID from the previous response as cursor.
+      parameters:
+      - description: Number of users to return (default 10)
+        in: query
+        name: limit
+        type: integer
+      - description: Last users ID from previous page
+        in: query
+        name: cursor
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.CursorUserResponse'
+      summary: List users (cursor-based)
+      tags:
+      - users
+  /users/search:
+    get:
+      description: Search users by email (partial match)
+      parameters:
+      - description: Email to search for
+        in: query
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ListUserResponse'
+      summary: Search user by email
+      tags:
+      - users
 swagger: "2.0"
