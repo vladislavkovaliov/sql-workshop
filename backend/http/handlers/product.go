@@ -1,8 +1,10 @@
 package handlers
 
 import (
+	"context"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 
@@ -41,10 +43,13 @@ func (h *ProductHandler) ListProducts(c *gin.Context) {
 		defaultOffset = offset
 	}
 
-	products, total, err := h.service.List(c.Request.Context(), defaultLimit, defaultOffset)
+	ctx, cancel := context.WithTimeout(c.Request.Context(), 5*time.Second)
+	defer cancel()
+
+	products, total, err := h.service.List(ctx, defaultLimit, defaultOffset)
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
 		return
 	}
 
@@ -88,10 +93,13 @@ func (h *ProductHandler) ListCursorProducts(c *gin.Context) {
 		defaultCursor = cursor
 	}
 
-	products, err := h.service.ListCursor(c.Request.Context(), defaultCursor, defaultLimit)
+	ctx, cancel := context.WithTimeout(c.Request.Context(), 5*time.Second)
+	defer cancel()
+
+	products, err := h.service.ListCursor(ctx, defaultCursor, defaultLimit)
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
 		return
 	}
 
@@ -135,7 +143,10 @@ func (h *ProductHandler) CreateProduct(c *gin.Context) {
 		return
 	}
 
-	product, err := h.service.Create(c.Request.Context(), req.Title, req.Price)
+	ctx, cancel := context.WithTimeout(c.Request.Context(), 5*time.Second)
+	defer cancel()
+
+	product, err := h.service.Create(ctx, req.Title, req.Price)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -157,10 +168,13 @@ func (h *ProductHandler) CreateProduct(c *gin.Context) {
 //	@Success		200	{object}	dto.ListTotalRevenueResponse
 //	@Router			/products/revenue [get]
 func (h *ProductHandler) TotalRevenue(c *gin.Context) {
-	totalRevenues, err := h.service.TotalRevenue(c.Request.Context())
+	ctx, cancel := context.WithTimeout(c.Request.Context(), 5*time.Second)
+	defer cancel()
+
+	totalRevenues, err := h.service.TotalRevenue(ctx)
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
 		return
 	}
 

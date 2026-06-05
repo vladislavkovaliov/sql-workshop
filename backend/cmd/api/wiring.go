@@ -56,7 +56,8 @@ func wireCategories(rg *gin.RouterGroup, pool *pgxpool.Pool) {
 	svc := categoryservice.New(repo)
 	h := handlers.NewCategoryHandler(svc)
 
-	rg.GET("/category", h.ListCategory)
+	rg.GET("/categories", h.ListCategory)
+	rg.GET("/categories/avarage-price", h.ListCategoryAvaragePrice)
 }
 
 func wireUsers(rg *gin.RouterGroup, pool *pgxpool.Pool) {
@@ -66,6 +67,6 @@ func wireUsers(rg *gin.RouterGroup, pool *pgxpool.Pool) {
 
 	rg.GET("/users", h.ListUsers)
 	rg.GET("/users/cursor", h.ListCursorUsers)
-	rg.GET("/users/search", h.SearchByEmail)
+	rg.GET("/users/search", h.Search)
 
 }

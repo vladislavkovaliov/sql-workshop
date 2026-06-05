@@ -1,4 +1,4 @@
-package product
+package category
 
 import (
 	"context"
@@ -16,14 +16,26 @@ func New(repo categorydomain.Repository) *Service {
 
 func (s *Service) List(ctx context.Context, limit int, offset int) ([]*categorydomain.Category, int, error) {
 	categories, err := s.repo.List(ctx, limit, offset)
+
 	if err != nil {
 		return nil, 0, err
 	}
 
 	total, err := s.repo.Count(ctx)
+
 	if err != nil {
 		return nil, 0, err
 	}
 
 	return categories, total, nil
+}
+
+func (s *Service) ListCategoryAvaragePrice(ctx context.Context) ([]*categorydomain.CategoryAvaragePrice, error) {
+	categoryAveragePrices, err := s.repo.ListCategoryAvaragePrice(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return categoryAveragePrices, nil
 }

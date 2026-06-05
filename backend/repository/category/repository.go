@@ -1,4 +1,4 @@
-package product
+package category
 
 import (
 	"context"
@@ -45,4 +45,37 @@ func (r *PgxRepository) List(ctx context.Context, limit int, offset int) ([]*cat
 	}
 
 	return products, rows.Err()
+}
+
+func (r *PgxRepository) ListCategoryAvaragePrice(ctx context.Context) ([]*categorydomain.CategoryAvaragePrice, error) {
+	rows, err := r.pool.Query(ctx, `
+		SELECT
+			c.title AS category,
+			ROUND(AVG(p.price)::numeric, 2) AS avg_price
+		FROM products p
+		JOIN product_categories pc ON pc.product_id = p.id
+		JOIN categories c ON c.id = pc.category_id
+		GROUP BY c.id, c.title LIMIT 100
+	`)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	var categoryAvaragePrices []*categorydomain.CategoryAvaragePrice
+
+	for rows.Next() {
+		var category string
+		var avg_price float64
+
+		if err := rows.Scan(&category, &avg_price); err != nil {
+			return nil, err
+		}
+
+		categoryAvaragePrices = append(categoryAvaragePrices, categorydomain.NewCategoryAvaragePrice(category, avg_price))
+	}
+
+	return categoryAvaragePrices, err
 }

@@ -2,11 +2,17 @@ package user
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	userdomain "shop-api/domain/user"
 )
+
+var allowedFields = map[string]string{
+	"email": "email",
+	"name":  "name",
+}
 
 type PgxRepository struct {
 	pool *pgxpool.Pool
@@ -85,8 +91,16 @@ func (r *PgxRepository) List(ctx context.Context, limit int, offset int) ([]*use
 	return users, rows.Err()
 }
 
-func (r *PgxRepository) SearchByEmail(ctx context.Context, email string) ([]*userdomain.User, error) {
-	rows, err := r.pool.Query(ctx, "SELECT id, name, email FROM users WHERE email = $1", email)
+func (r *PgxRepository) Search(ctx context.Context, field string, value string) ([]*userdomain.User, error) {
+	col, ok := allowedFields[field]
+
+	if !ok {
+		return nil, fmt.Errorf("invalid search field: %s", field)
+	}
+
+	query := fmt.Sprintf("SELECT id, name, email FROM users WHERE %s ILIKE '%%' || $1 || '%%'", col)
+
+	rows, err := r.pool.Query(ctx, query, value)
 
 	if err != nil {
 		return nil, err

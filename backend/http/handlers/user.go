@@ -1,9 +1,10 @@
 package handlers
 
 import (
-	"fmt"
+	"context"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 
@@ -42,10 +43,13 @@ func (h *UserHandler) ListUsers(c *gin.Context) {
 		defaultOffset = offset
 	}
 
-	users, total, err := h.service.List(c.Request.Context(), defaultLimit, defaultOffset)
+	ctx, cancel := context.WithTimeout(c.Request.Context(), 5*time.Second)
+	defer cancel()
+
+	users, total, err := h.service.List(ctx, defaultLimit, defaultOffset)
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
 		return
 	}
 
@@ -89,10 +93,13 @@ func (h *UserHandler) ListCursorUsers(c *gin.Context) {
 		defaultCursor = cursor
 	}
 
-	users, err := h.service.ListCursor(c.Request.Context(), defaultCursor, defaultLimit)
+	ctx, cancel := context.WithTimeout(c.Request.Context(), 5*time.Second)
+	defer cancel()
+
+	users, err := h.service.ListCursor(ctx, defaultCursor, defaultLimit)
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
 		return
 	}
 
@@ -117,31 +124,38 @@ func (h *UserHandler) ListCursorUsers(c *gin.Context) {
 	})
 }
 
-// SearchByEmail godoc
+// Search godoc
 //
-//	@Summary		Search user by email
-//	@Description	Search users by email (partial match)
+//	@Summary		Search user by field
+//	@Description	Search users by field (partial match)
 //	@Tags			users
 //	@Produce		json
 //	@Success		200	{object}	dto.ListUserResponse
 //	@Router			/users/search [get]
 //
-//	@Param			email	query	string	true	"Email to search for"
-func (h *UserHandler) SearchByEmail(c *gin.Context) {
+// @Param field query string true "Field to search by" Enums(email, name)
+// @Param value	query string true "Value to search for"
+func (h *UserHandler) Search(c *gin.Context) {
+	field := c.Query("field")
+	value := c.Query("value")
 
-	email := c.Query("email")
-
-	fmt.Println(email)
-
-	if email == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "email is required"})
+	if field == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "field is required"})
 		return
 	}
 
-	users, err := h.service.SearchByEmail(c.Request.Context(), email)
+	if value == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "value is required"})
+		return
+	}
+
+	ctx, cancel := context.WithTimeout(c.Request.Context(), 5*time.Second)
+	defer cancel()
+
+	users, err := h.service.Search(ctx, field, value)
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
 		return
 	}
 

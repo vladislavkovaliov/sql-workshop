@@ -15,14 +15,14 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/category": {
+        "/categories": {
             "get": {
                 "description": "Returns all categories from the database",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "category"
+                    "categories"
                 ],
                 "summary": "List all categories",
                 "parameters": [
@@ -44,6 +44,26 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/dto.ListCategoryResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/categories/avarage-price": {
+            "get": {
+                "description": "Returns average product price grouped by category",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "categories"
+                ],
+                "summary": "Get average price per category",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ListCategoryAvaragePriceResponse"
                         }
                     }
                 }
@@ -282,19 +302,30 @@ const docTemplate = `{
         },
         "/users/search": {
             "get": {
-                "description": "Search users by email (partial match)",
+                "description": "Search users by field (partial match)",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "users"
                 ],
-                "summary": "Search user by email",
+                "summary": "Search user by field",
                 "parameters": [
                     {
+                        "enum": [
+                            "email",
+                            "name"
+                        ],
                         "type": "string",
-                        "description": "Email to search for",
-                        "name": "email",
+                        "description": "Field to search by",
+                        "name": "field",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Value to search for",
+                        "name": "value",
                         "in": "query",
                         "required": true
                     }
@@ -311,6 +342,17 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "dto.CategoryAveragePrice": {
+            "type": "object",
+            "properties": {
+                "avg_price": {
+                    "type": "number"
+                },
+                "category": {
+                    "type": "string"
+                }
+            }
+        },
         "dto.CategoryResponse": {
             "type": "object",
             "properties": {
@@ -362,6 +404,20 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/dto.UserResponse"
                     }
+                }
+            }
+        },
+        "dto.ListCategoryAvaragePriceResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.CategoryAveragePrice"
+                    }
+                },
+                "total": {
+                    "type": "integer"
                 }
             }
         },

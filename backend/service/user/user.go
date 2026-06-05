@@ -2,7 +2,6 @@ package user
 
 import (
 	"context"
-	"fmt"
 	userdomain "shop-api/domain/user"
 )
 
@@ -33,8 +32,6 @@ func (s *Service) ListCursor(ctx context.Context, cursor int, limit int) ([]*use
 	return s.repo.ListCursor(ctx, cursor, limit)
 }
 
-func (s *Service) SearchByEmail(ctx context.Context, email string) ([]*userdomain.User, error) {
-	fmt.Println(email)
-
-	return s.repo.SearchByEmail(ctx, email)
+func (s *Service) Search(ctx context.Context, field string, value string) ([]*userdomain.User, error) {
+	return s.repo.Search(ctx, field, value)
 }

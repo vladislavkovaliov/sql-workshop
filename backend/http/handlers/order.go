@@ -1,8 +1,10 @@
 package handlers
 
 import (
+	"context"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 
@@ -41,10 +43,13 @@ func (h *OrderHandler) ListOrder(c *gin.Context) {
 		defaultOffset = offset
 	}
 
-	orders, total, err := h.service.List(c.Request.Context(), defaultLimit, defaultOffset)
+	ctx, cancel := context.WithTimeout(c.Request.Context(), 5*time.Second)
+	defer cancel()
+
+	orders, total, err := h.service.List(ctx, defaultLimit, defaultOffset)
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
 		return
 	}
 
@@ -53,7 +58,7 @@ func (h *OrderHandler) ListOrder(c *gin.Context) {
 	for _, p := range orders {
 		res = append(res, dto.OrderResponse{
 			ID:        p.ID(),
-			UserId:    p.UserID(),
+			UserID:    p.UserID(),
 			CreatedAt: p.CreatedAt(),
 		})
 	}

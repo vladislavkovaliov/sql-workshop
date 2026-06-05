@@ -1,5 +1,12 @@
 basePath: /api
 definitions:
+  dto.CategoryAveragePrice:
+    properties:
+      avg_price:
+        type: number
+      category:
+        type: string
+    type: object
   dto.CategoryResponse:
     properties:
       id:
@@ -35,6 +42,15 @@ definitions:
         items:
           $ref: '#/definitions/dto.UserResponse'
         type: array
+    type: object
+  dto.ListCategoryAvaragePriceResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/dto.CategoryAveragePrice'
+        type: array
+      total:
+        type: integer
     type: object
   dto.ListCategoryResponse:
     properties:
@@ -131,7 +147,7 @@ info:
   title: Shop API
   version: "1.0"
 paths:
-  /category:
+  /categories:
     get:
       description: Returns all categories from the database
       parameters:
@@ -152,7 +168,20 @@ paths:
             $ref: '#/definitions/dto.ListCategoryResponse'
       summary: List all categories
       tags:
-      - category
+      - categories
+  /categories/avarage-price:
+    get:
+      description: Returns average product price grouped by category
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ListCategoryAvaragePriceResponse'
+      summary: Get average price per category
+      tags:
+      - categories
   /orders:
     get:
       description: Returns all orders from the database
@@ -308,11 +337,19 @@ paths:
       - users
   /users/search:
     get:
-      description: Search users by email (partial match)
+      description: Search users by field (partial match)
       parameters:
-      - description: Email to search for
+      - description: Field to search by
+        enum:
+        - email
+        - name
         in: query
-        name: email
+        name: field
+        required: true
+        type: string
+      - description: Value to search for
+        in: query
+        name: value
         required: true
         type: string
       produces:
@@ -322,7 +359,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/dto.ListUserResponse'
-      summary: Search user by email
+      summary: Search user by field
       tags:
       - users
 swagger: "2.0"
