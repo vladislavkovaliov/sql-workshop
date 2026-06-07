@@ -124,3 +124,75 @@ func (r *PgxRepository) Search(ctx context.Context, field string, value string) 
 
 	return users, rows.Err()
 }
+
+func (r *PgxRepository) ListTop3Users(ctx context.Context) ([]*userdomain.UserWithPurchases, error) {
+	rows, err := r.pool.Query(ctx, `
+		SELECT u.id, u.name, u.email, COUNT(*) as "purchases" FROM users u
+		JOIN orders o ON o.user_id = u.id
+		GROUP BY u.id, u.email, u.name
+		ORDER BY purchases DESC
+		LIMIT 3; 
+	`)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	var top3Users []*userdomain.UserWithPurchases
+
+	for rows.Next() {
+		var id int64
+		var name string
+		var email string
+		var purchases int
+
+		if err := rows.Scan(&id, &name, &email, &purchases); err != nil {
+			return nil, err
+		}
+
+		top3Users = append(top3Users, userdomain.NewUserWithPurchases(id, name, email, purchases))
+	}
+
+	return top3Users, rows.Err()
+}
+
+func (r *PgxRepository) ListUserByMostExpensiveProduct(ctx context.Context) ([]*userdomain.UserByMostExpensiveProduct, error) {
+	rows, err := r.pool.Query(ctx, `
+		SELECT DISTINCT u.id, u.email, u.name FROM users u
+		JOIN orders o ON o.user_id = u.id
+		JOIN order_items oi ON oi.order_id = o.id
+		WHERE oi.product_id = (
+			SELECT id FROM products
+			ORDER BY price DESC
+			LIMIT 10
+		);
+	`)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	var userByMostExpensiveProducts []*userdomain.UserByMostExpensiveProduct
+
+	for rows.Next() {
+		var id int64
+		var name string
+		var email string
+
+		if err := rows.Scan(&id, &name, &email); err != nil {
+			return nil, err
+		}
+
+		userByMostExpensiveProducts = append(
+			userByMostExpensiveProducts,
+			userdomain.NewUserByMostExpensiveProduct(id, name, email),
+		)
+	}
+
+	return userByMostExpensiveProducts, rows.Err()
+
+}

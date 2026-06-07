@@ -88,11 +88,29 @@ definitions:
       total:
         type: integer
     type: object
+  dto.ListUserByMostExpensiveProductResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/dto.UserByMostExpensiveProduct'
+        type: array
+      total:
+        type: integer
+    type: object
   dto.ListUserResponse:
     properties:
       data:
         items:
           $ref: '#/definitions/dto.UserResponse'
+        type: array
+      total:
+        type: integer
+    type: object
+  dto.ListUserWithPurchasesResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/dto.UserWithPurchases'
         type: array
       total:
         type: integer
@@ -128,6 +146,18 @@ definitions:
       title:
         type: string
     type: object
+  dto.UserByMostExpensiveProduct:
+    properties:
+      email:
+        example: text@gmail.com
+        type: string
+      id:
+        example: 1
+        type: integer
+      name:
+        example: username
+        type: string
+    type: object
   dto.UserResponse:
     properties:
       email:
@@ -139,6 +169,21 @@ definitions:
       name:
         example: username
         type: string
+    type: object
+  dto.UserWithPurchases:
+    properties:
+      email:
+        example: text@gmail.com
+        type: string
+      id:
+        example: 1
+        type: integer
+      name:
+        example: username
+        type: string
+      purchases:
+        example: 1
+        type: integer
     type: object
 host: localhost:8080
 info:
@@ -312,6 +357,19 @@ paths:
       summary: List all users
       tags:
       - users
+  /users/by-most-expensive-product:
+    get:
+      description: Returns users by the most expensive product
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ListUserByMostExpensiveProductResponse'
+      summary: Get users by the most expensive product
+      tags:
+      - users
   /users/cursor:
     get:
       description: Returns users with cursor-based pagination. Pass the last user
@@ -360,6 +418,19 @@ paths:
           schema:
             $ref: '#/definitions/dto.ListUserResponse'
       summary: Search user by field
+      tags:
+      - users
+  /users/top-3-users:
+    get:
+      description: Returns top 3 users with the highest number of purchases
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ListUserWithPurchasesResponse'
+      summary: Get top 3 users by purchases
       tags:
       - users
 swagger: "2.0"

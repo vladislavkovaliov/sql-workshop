@@ -49,6 +49,7 @@ func wireOrders(rg *gin.RouterGroup, pool *pgxpool.Pool) {
 	h := handlers.NewOrderHandler(svc)
 
 	rg.GET("/orders", h.ListOrder)
+	rg.GET("/orders/daily-purchases", h.ListDailyPurchases)
 }
 
 func wireCategories(rg *gin.RouterGroup, pool *pgxpool.Pool) {
@@ -68,5 +69,7 @@ func wireUsers(rg *gin.RouterGroup, pool *pgxpool.Pool) {
 	rg.GET("/users", h.ListUsers)
 	rg.GET("/users/cursor", h.ListCursorUsers)
 	rg.GET("/users/search", h.Search)
+	rg.GET("/users/top-3-users", h.ListTop3Users)
+	rg.GET("/users/by-most-expensive-product", h.ListUserByMostExpensiveProduct)
 
 }

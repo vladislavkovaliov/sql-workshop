@@ -174,3 +174,76 @@ func (h *UserHandler) Search(c *gin.Context) {
 		Total: len(res),
 	})
 }
+
+// ListTop3Users godoc
+//
+//	@Summary		Get top 3 users by purchases
+//	@Description	Returns top 3 users with the highest number of purchases
+//	@Tags			users
+//	@Produce		json
+//	@Success		200	{object}	dto.ListUserWithPurchasesResponse
+//	@Router			/users/top-3-users [get]
+func (h *UserHandler) ListTop3Users(c *gin.Context) {
+	ctx, cancel := context.WithTimeout(c.Request.Context(), 5*time.Second)
+
+	defer cancel()
+
+	top3Users, err := h.service.ListTop3Users(ctx)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
+		return
+	}
+
+	res := make([]dto.UserWithPurchases, 0, len(top3Users))
+
+	for _, u := range top3Users {
+		res = append(res, dto.UserWithPurchases{
+			ID:        u.ID(),
+			Name:      u.Name(),
+			Email:     u.Email(),
+			Purchases: u.Purchases(),
+		})
+	}
+
+	c.JSON(http.StatusOK, dto.ListUserWithPurchasesResponse{
+		Data:  res,
+		Total: len(res),
+	})
+}
+
+// ListUserByMostExpensiveProduct godoc
+//
+//	@Summary		Get users by the most expensive product
+//	@Description	Returns users by the most expensive product
+//	@Tags			users
+//	@Produce		json
+//	@Success		200	{object}	dto.ListUserByMostExpensiveProductResponse
+//	@Router			/users/by-most-expensive-product [get]
+func (h *UserHandler) ListUserByMostExpensiveProduct(c *gin.Context) {
+	ctx, cancel := context.WithTimeout(c.Request.Context(), 5*time.Second)
+
+	defer cancel()
+
+	users, err := h.service.ListUserByMostExpensiveProduct(ctx)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
+		return
+	}
+
+	res := make([]dto.UserByMostExpensiveProduct, 0, len(users))
+
+	for _, u := range users {
+		res = append(res, dto.UserByMostExpensiveProduct{
+			ID:    u.ID(),
+			Name:  u.Name(),
+			Email: u.Email(),
+		})
+	}
+
+	c.JSON(http.StatusOK, dto.ListUserByMostExpensiveProductResponse{
+		Data:  res,
+		Total: len(res),
+	})
+}

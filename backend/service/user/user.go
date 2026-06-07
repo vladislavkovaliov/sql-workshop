@@ -35,3 +35,11 @@ func (s *Service) ListCursor(ctx context.Context, cursor int, limit int) ([]*use
 func (s *Service) Search(ctx context.Context, field string, value string) ([]*userdomain.User, error) {
 	return s.repo.Search(ctx, field, value)
 }
+
+func (s *Service) ListTop3Users(ctx context.Context) ([]*userdomain.UserWithPurchases, error) {
+	return s.repo.ListTop3Users(ctx)
+}
+
+func (s *Service) ListUserByMostExpensiveProduct(ctx context.Context) ([]*userdomain.UserByMostExpensiveProduct, error) {
+	return s.repo.ListUserByMostExpensiveProduct(ctx)
+}

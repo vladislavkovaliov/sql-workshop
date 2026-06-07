@@ -266,6 +266,26 @@ const docTemplate = `{
                 }
             }
         },
+        "/users/by-most-expensive-product": {
+            "get": {
+                "description": "Returns users by the most expensive product",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get users by the most expensive product",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ListUserByMostExpensiveProductResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/users/cursor": {
             "get": {
                 "description": "Returns users with cursor-based pagination. Pass the last user ID from the previous response as cursor.",
@@ -335,6 +355,26 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/dto.ListUserResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/top-3-users": {
+            "get": {
+                "description": "Returns top 3 users with the highest number of purchases",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get top 3 users by purchases",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ListUserWithPurchasesResponse"
                         }
                     }
                 }
@@ -477,6 +517,20 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.ListUserByMostExpensiveProductResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.UserByMostExpensiveProduct"
+                    }
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
         "dto.ListUserResponse": {
             "type": "object",
             "properties": {
@@ -484,6 +538,20 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/dto.UserResponse"
+                    }
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.ListUserWithPurchasesResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.UserWithPurchases"
                     }
                 },
                 "total": {
@@ -536,6 +604,23 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.UserByMostExpensiveProduct": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "text@gmail.com"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "type": "string",
+                    "example": "username"
+                }
+            }
+        },
         "dto.UserResponse": {
             "type": "object",
             "properties": {
@@ -550,6 +635,27 @@ const docTemplate = `{
                 "name": {
                     "type": "string",
                     "example": "username"
+                }
+            }
+        },
+        "dto.UserWithPurchases": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "text@gmail.com"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "type": "string",
+                    "example": "username"
+                },
+                "purchases": {
+                    "type": "integer",
+                    "example": 1
                 }
             }
         }
