@@ -7,16 +7,18 @@ import (
 )
 
 type Config struct {
-	Port        string
-	DatabaseUrl string
+	Port          string
+	DatabaseUrl   string
+	KafkaBrockers string
 }
 
 func LoadConfig() *Config {
 	_ = godotenv.Load()
 
 	return &Config{
-		Port:        getEnv("PORT", "8080"),
-		DatabaseUrl: getEnv("DATABASE_URL", "postgres://postgres:password@localhost:55000/shop?sslmode=disable"),
+		Port:          getEnv("PORT", "8080"),
+		DatabaseUrl:   getEnv("DATABASE_URL", "postgres://postgres:password@localhost:55000/shop?sslmode=disable"),
+		KafkaBrockers: getEnv("KAFKA_BROKERS", "localhost:9092"),
 	}
 }
 

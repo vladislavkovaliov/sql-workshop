@@ -101,6 +101,67 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "post": {
+                "description": "Creates an order and publishes order.created event to Kafka",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "orders"
+                ],
+                "summary": "Create a new order",
+                "parameters": [
+                    {
+                        "description": "Order data",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.CreateOrderRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/dto.OrderResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/orders/daily-purchases": {
+            "get": {
+                "description": "Returns all orders from the database",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "orders"
+                ],
+                "summary": "List all daily purchases",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ListDailyPurchasesResponse"
+                        }
+                    }
+                }
             }
         },
         "/products": {
@@ -406,6 +467,15 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.CreateOrderRequest": {
+            "type": "object",
+            "properties": {
+                "user_id": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
         "dto.CreateProductRequest": {
             "type": "object",
             "properties": {
@@ -447,6 +517,17 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.DailyPurchases": {
+            "type": "object",
+            "properties": {
+                "order_date": {
+                    "type": "string"
+                },
+                "purchases": {
+                    "type": "integer"
+                }
+            }
+        },
         "dto.ListCategoryAvaragePriceResponse": {
             "type": "object",
             "properties": {
@@ -468,6 +549,20 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/dto.CategoryResponse"
+                    }
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.ListDailyPurchasesResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.DailyPurchases"
                     }
                 },
                 "total": {

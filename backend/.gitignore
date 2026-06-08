@@ -13,3 +13,6 @@ tmp/
 
 # OS
 .DS_Store
+
+# DB
+pgdata_backup

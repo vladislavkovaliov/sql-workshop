@@ -17,6 +17,9 @@ import (
 
 	_ "shop-api/docs"
 	"shop-api/internal/config"
+	"shop-api/internal/events"
+
+	orderrepo "shop-api/repository/order"
 )
 
 func main() {
@@ -30,10 +33,20 @@ func main() {
 
 	defer pool.Close()
 
-	r := setupRouter(pool)
+	brokers := []string{cfg.KafkaBrockers}
+
+	producer := events.NewProducer(brokers)
+
+	defer producer.Close()
 
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
+
+	orderRepo := orderrepo.NewPgxRepository(pool)
+
+	go events.StartConsumer(ctx, brokers, "shop-api", orderRepo)
+
+	r := setupRouter(pool, producer)
 
 	srv := &http.Server{
 		Addr:    ":" + cfg.Port,

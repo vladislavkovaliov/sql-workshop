@@ -12,3 +12,17 @@ type ListOrderResponse struct {
 	Data  []OrderResponse `json:"data"`
 	Total int             `json:"total"`
 }
+
+type DailyPurchases struct {
+	OrderDate time.Time `json:"order_date"`
+	Purchases int       `json:"purchases"`
+}
+
+type ListDailyPurchasesResponse struct {
+	Data  []DailyPurchases `json:"data"`
+	Total int              `json:"total"`
+}
+
+type CreateOrderRequest struct {
+	UserID int64 `json:"user_id" example:"1"`
+}

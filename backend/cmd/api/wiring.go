@@ -7,6 +7,7 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 
 	"shop-api/http/handlers"
+	"shop-api/internal/events"
 	categoryrepo "shop-api/repository/category"
 	orderrepo "shop-api/repository/order"
 	productrepo "shop-api/repository/product"
@@ -17,13 +18,13 @@ import (
 	userservice "shop-api/service/user"
 )
 
-func setupRouter(pool *pgxpool.Pool) *gin.Engine {
+func setupRouter(pool *pgxpool.Pool, producer *events.Producer) *gin.Engine {
 	r := gin.Default()
 
 	api := r.Group("/api")
 	{
 		wireProducts(api, pool)
-		wireOrders(api, pool)
+		wireOrders(api, pool, producer)
 		wireCategories(api, pool)
 		wireUsers(api, pool)
 	}
@@ -43,12 +44,13 @@ func wireProducts(rg *gin.RouterGroup, pool *pgxpool.Pool) {
 	rg.GET("/products/revenue", h.TotalRevenue)
 }
 
-func wireOrders(rg *gin.RouterGroup, pool *pgxpool.Pool) {
+func wireOrders(rg *gin.RouterGroup, pool *pgxpool.Pool, producer *events.Producer) {
 	repo := orderrepo.NewPgxRepository(pool)
-	svc := orderservice.New(repo)
+	svc := orderservice.New(repo, producer)
 	h := handlers.NewOrderHandler(svc)
 
 	rg.GET("/orders", h.ListOrder)
+	rg.POST("/orders", h.CreateOrder)
 	rg.GET("/orders/daily-purchases", h.ListDailyPurchases)
 }
 
